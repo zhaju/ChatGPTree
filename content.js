@@ -8,34 +8,44 @@ function updateCharacterCount() {
 
     console.log("Detected Character Count:", totalCharacters);
 
-    let energyUsed = (totalCharacters * 0.036).toFixed(4) + " Wh";
-    let carbonEmitted = (totalCharacters * 0.053).toFixed(4) + " g";
-    let waterUsed = (totalCharacters * 0.00625).toFixed(4) + " L";
+    // Environmental impact calculations
+    let energyUsed = (totalCharacters * 0.036).toFixed(4); // Wh
+    let carbonEmitted = (totalCharacters * 0.053).toFixed(4); // g
+    let waterUsed = (totalCharacters * 0.00625).toFixed(4); // L
 
-    chrome.storage.local.get(["cumulativeCharCount", "birdsKilled"], (data) => {
-        let cumulativeCharCount = (data.cumulativeCharCount || 0) + totalCharacters;
-        let newBirdsKilled = Math.floor(cumulativeCharCount / 10);
+    let hospitalMachineMinutes = (energyUsed / 5).toFixed(2);
+    let familyWaterDays = (waterUsed / 10).toFixed(2);
+    let treeLifespanDays = (carbonEmitted / 60).toFixed(2);
+
+    // Retrieve total stored character count from all sessions
+    chrome.storage.local.get("totalCharCount", (data) => {
+        let totalCharCount = data.totalCharCount || 0;
+        totalCharCount += totalCharacters;
 
         chrome.storage.local.set(
-            { 
-                charCount: totalCharacters, 
-                energyUsed, 
-                carbonEmitted, 
-                waterUsed, 
-                cumulativeCharCount,
-                birdsKilled: newBirdsKilled
+            {
+                charCount: totalCharacters,
+                totalCharCount,
+                energyUsed,
+                carbonEmitted,
+                waterUsed,
+                hospitalMachineMinutes,
+                familyWaterDays,
+                treeLifespanDays
             },
             () => {
                 if (chrome.runtime.lastError) {
                     console.error("Error storing values:", chrome.runtime.lastError);
                 } else {
-                    console.log("Stored Data:", { 
-                        totalCharacters, 
-                        energyUsed, 
-                        carbonEmitted, 
-                        waterUsed, 
-                        cumulativeCharCount, 
-                        birdsKilled: newBirdsKilled 
+                    console.log("Stored Data:", {
+                        totalCharacters,
+                        totalCharCount,
+                        energyUsed,
+                        carbonEmitted,
+                        waterUsed,
+                        hospitalMachineMinutes,
+                        familyWaterDays,
+                        treeLifespanDays
                     });
                 }
             }
