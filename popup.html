@@ -9,18 +9,66 @@
             font-family: Arial, sans-serif;
             width: 260px;
             padding: 10px;
+            margin: 0;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, #4dc3f1, #a2edf7); 
+            overflow: hidden;
+            position: relative;
         }
-        h3 {
-            margin-bottom: 10px;
+        /* Clouds styling */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 70%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        p {
-            margin: 5px 0;
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            opacity: 50%;
+            border-radius: 50%;
         }
+        .cloud::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 10px;
+        }
+        .cloud::after {
+            width: 100px;
+            height: 100px;
+            top: -50px;
+            right: 10px;
+            opacity: 50%;
+        }
+
+        /* Specific cloud positions */
+        .cloud1 { width: 120px; height: 80px; top: 20px; left: 20px; z-index: 5; }
+        .cloud2 { width: 150px; height: 100px; top: 50px; right: 50px; z-index: 10; }
+        .cloud3 { width: 150px; height: 80px; top: 100px; left: 150px; z-index: 10; }
+
+        /* Text styles */
+        h3, p {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+        }
+        h3.over-cloud, p.over-cloud {
+            z-index: 20;
+        }
+
         #details {
             display: none;
         }
+
         .toggle-btn {
-            color: blue;
+            color: rgb(88, 88, 88);
             text-decoration: underline;
             cursor: pointer;
             display: inline-block;
@@ -29,7 +77,12 @@
     </style>
 </head>
 <body>
-    <h3>The resources used in your conversation could have:</h3>
+    <!-- Clouds -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <h3 style="text-align: center;">The resources used in your conversation could have:</h3>
     <p>Powered a hospital machine for <b><span id="hospitalMinutes">0</span></b> minutes</p>
     <p>Supplied a family’s drinking water for <b><span id="familyWaterDays">0</span></b> days</p>
     <p>Saved a tree’s lifespan by <b><span id="treeLifespanDays">0</span></b> days</p>
