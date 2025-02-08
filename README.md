@@ -25,3 +25,13 @@ We see our extension being:
 - Downloaded by school computers
 - Built into commercial LLMs
 - Raising awareness about more efficient energy use
+
+## 💻 Installation
+1. Clone the repository / Download the files
+```
+$ git clone https://github.com/zhaju/ChatGPTree.git
+```
+2. Navigate to `chrome://extensions/` 
+3. Click `Load Unpacked` and select the folder `ChatGPTree`
+4. Click the Reload button  on the extension
+5. Open ChatGPT and start tacking your usage!
