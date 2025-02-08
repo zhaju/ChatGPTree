@@ -12,20 +12,35 @@ function updateCharacterCount() {
     let carbonEmitted = (totalCharacters * 0.053).toFixed(4) + " g";
     let waterUsed = (totalCharacters * 0.00625).toFixed(4) + " L";
 
-    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get(["cumulativeCharCount", "birdsKilled"], (data) => {
+        let cumulativeCharCount = (data.cumulativeCharCount || 0) + totalCharacters;
+        let newBirdsKilled = Math.floor(cumulativeCharCount / 10);
+
         chrome.storage.local.set(
-            { charCount: totalCharacters, energyUsed, carbonEmitted, waterUsed },
+            { 
+                charCount: totalCharacters, 
+                energyUsed, 
+                carbonEmitted, 
+                waterUsed, 
+                cumulativeCharCount,
+                birdsKilled: newBirdsKilled
+            },
             () => {
                 if (chrome.runtime.lastError) {
                     console.error("Error storing values:", chrome.runtime.lastError);
                 } else {
-                    console.log("Stored Data:", { totalCharacters, energyUsed, carbonEmitted, waterUsed });
+                    console.log("Stored Data:", { 
+                        totalCharacters, 
+                        energyUsed, 
+                        carbonEmitted, 
+                        waterUsed, 
+                        cumulativeCharCount, 
+                        birdsKilled: newBirdsKilled 
+                    });
                 }
             }
         );
-    } else {
-        console.error("chrome.storage is not available in content.js");
-    }
+    });
 }
 
 // Observe ChatGPT responses
