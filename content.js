@@ -17,35 +17,38 @@ function updateCharacterCount() {
     let familyWaterDays = (waterUsed / 10).toFixed(2);
     let treeLifespanDays = (carbonEmitted / 60).toFixed(2);
 
-    // Retrieve total stored character count from all sessions
-    chrome.storage.local.get("totalCharCount", (data) => {
-        let totalCharCount = data.totalCharCount || 0;
-        totalCharCount += totalCharacters;
+    // Retrieve stored totals
+    chrome.storage.local.get(["cumulativeEnergy", "cumulativeCarbon", "cumulativeWater"], (data) => {
+        let cumulativeEnergy = parseFloat(data.cumulativeEnergy || 0) + parseFloat(energyUsed);
+        let cumulativeCarbon = parseFloat(data.cumulativeCarbon || 0) + parseFloat(carbonEmitted);
+        let cumulativeWater = parseFloat(data.cumulativeWater || 0) + parseFloat(waterUsed);
 
         chrome.storage.local.set(
             {
-                charCount: totalCharacters,
-                totalCharCount,
                 energyUsed,
                 carbonEmitted,
                 waterUsed,
                 hospitalMachineMinutes,
                 familyWaterDays,
-                treeLifespanDays
+                treeLifespanDays,
+                cumulativeEnergy: cumulativeEnergy.toFixed(4),
+                cumulativeCarbon: cumulativeCarbon.toFixed(4),
+                cumulativeWater: cumulativeWater.toFixed(4)
             },
             () => {
                 if (chrome.runtime.lastError) {
                     console.error("Error storing values:", chrome.runtime.lastError);
                 } else {
                     console.log("Stored Data:", {
-                        totalCharacters,
-                        totalCharCount,
                         energyUsed,
                         carbonEmitted,
                         waterUsed,
                         hospitalMachineMinutes,
                         familyWaterDays,
-                        treeLifespanDays
+                        treeLifespanDays,
+                        cumulativeEnergy,
+                        cumulativeCarbon,
+                        cumulativeWater
                     });
                 }
             }
